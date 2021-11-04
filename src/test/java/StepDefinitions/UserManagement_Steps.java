@@ -2,10 +2,14 @@ package StepDefinitions;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.cucumber.java.en.*;
+import junit.framework.Assert;
 import pageObjects.UserPage;
 
 public class UserManagement_Steps {
@@ -17,35 +21,54 @@ public class UserManagement_Steps {
 		System.setProperty("webdriver.chrome.driver", "//Users//nabulizi//IdeaProjects//chromedriver");
 	    driver=new ChromeDriver();
 	    driver.get(url);
-	    driver.findElement(By.xpath("//*[contains(text(),' Add User')]")).click();;
-	    //UserPage.clickAddUser();
+	}
+	
+	@When("user click add_user link")
+	public void user_click_add_user_link() {
+		UserPage.clickAddUser(driver);
 	}
 
-	@When("user enters <firstname>,<lastname>,<username>,<password>,<Email>,<cellphone>")
-	public void user_enters_firstname_lastname_username_password_email_cellphone() {
-		//driver=new ChromeDriver();
-		//userPage=new UserPage(driver);
-		//userPage.SetValue(driver.findElement(By.), "firstname");
+	@Then("user should see add_user modal")
+	public void user_should_see_add_user_modal() {
+	    WebDriverWait wait=new WebDriverWait(driver,5);
+	    WebElement addUserModal=wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Close')]")));
+	    String actual=addUserModal.getText();
+	    Assert.assertEquals("Close",actual );
 	}
 
+	@When("user enters \"(.*?)\" in firstname field$")
+	public void user_enters_first_name_in_firstname_field(String firstName) {
+		driver.findElement(By.name("FirstName")).sendKeys(firstName);
+	}
+
+	@And("user enters \"(.*?)\" in username field$")
+	public void user_enters_user_name_in_username_field(String userName) {
+		driver.findElement(By.name("UserName")).sendKeys(userName);
+	}
+
+	@And("user enters \"(.*?)\" in password field$")
+	public void user_enters_pass_word_in_password_field(String passWord) {
+		driver.findElement(By.name("Password")).sendKeys(passWord);
+	}
+
+	@And("user enters \"(.*?)\" in cellphone field$")
+	public void user_enters_cell_phone_in_cellphone_field(String cellPhone) {
+		driver.findElement(By.name("Mobilephone")).sendKeys(cellPhone);
+	}
+	
+	@And("user selects \"(.*?)\" role$")
+	public void user_selects_role(String userRole) {
+		Select role= new Select(driver.findElement(By.name("RoleId")));
+		role.selectByVisibleText(userRole);
+	}
 	@When("user clicks on save button")
 	public void user_clicks_on_save_button() {
-		System.out.println("test1");
+		UserPage.clickSaveButton(driver);
 	}
 
-	@Then("a user is added")
-	public void a_user_is_added() {
-		System.out.println("test1");
-	}
-
-	@Then("I add a user to web table")
-	public void i_add_a_user_to_web_table() {
-		System.out.println("test1");
-	}
-
-	@Then("delete a user from the web table")
-	public void delete_a_user_from_the_web_table() {
-		System.out.println("test1");
+	@Then("user \"(.*?)\" is added$")
+	public void a_user_is_added(String fn) {
+		UserPage.verifyUser(driver,fn);
 	}
 
 }
