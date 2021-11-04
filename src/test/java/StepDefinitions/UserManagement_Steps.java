@@ -70,5 +70,25 @@ public class UserManagement_Steps {
 	public void a_user_is_added(String fn) {
 		UserPage.verifyUser(driver,fn);
 	}
+	
+	@When("user click delete mark for username {string} from webtable")
+	public void user_click_delete_mark_for_username_from_webtable(String userName) {
+		UserPage.clickDelete(driver, userName);
+	}
+
+	@Then("user should be able to see confirmation Dialog")
+	public void user_should_be_able_to_see_confirmation_dialog() {
+		UserPage.verifyConfirmationDialog(driver);
+	}
+
+	@When("user click ok button")
+	public void user_click_ok_button() {
+		UserPage.clickOkButton(driver);
+	}
+
+	@Then("user {string} should be deteted from webtable")
+	public void user_should_be_deteted_from_webtable(String string) {
+
+	}
 
 }

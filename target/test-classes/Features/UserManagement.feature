@@ -12,7 +12,10 @@ Feature: User_Management
     And user clicks on save button 
     Then user "Nueraili" is added
 
-    
-
-
+   Scenario: Delete user User Name: novak and validate user has been delete
+		Given user is on User_Page "https://www.way2automation.com/angularjs-protractor/webtables/"
+		When user click delete mark for username "novak" from webtable 
+		Then user should be able to see confirmation Dialog 
+		When user click ok button
+		Then user "novak" should be deteted from webtable
       
